@@ -91,7 +91,9 @@ public class SmartUpgrade {
                     }
                 });
             } catch (Throwable e) {
-                e.printStackTrace();
+                if (listener != null) {
+                    listener.onSmart(400, dest);
+                }
             }
         }
 
@@ -101,6 +103,7 @@ public class SmartUpgrade {
                     try {
                         new File(p).delete();
                     } catch (Throwable e) {
+                        // ignore
                     }
                 }
             }
@@ -114,7 +117,7 @@ public class SmartUpgrade {
     private OnSmartListener listener;
 
     public interface OnSmartListener {
-        void onSmart(int code, String path);
+        void onSmart(int statusCode, String path);
     }
 
 }
