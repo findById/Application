@@ -3,10 +3,16 @@
     package="org.cn.application">
 
     <!--  -->
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
 
     <!--  -->
+    <uses-permission-sdk-23 android:name="android.permission.INTERNET"></uses-permission-sdk-23>
+    <uses-permission-sdk-23 android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission-sdk-23>
+    <uses-permission-sdk-23 android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission-sdk-23>
     <uses-permission-sdk-23 android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission-sdk-23>
     <uses-permission-sdk-23 android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission-sdk-23>
 
@@ -26,7 +32,25 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!-- browser launcher -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="splash.org.cn.application" android:scheme="scheme"/>
+            </intent-filter>
         </activity>
+
+        <service
+            android:name="org.cn.push.core.PushService"
+            android:process=":PushService"></service>
+
+        <receiver android:name="org.cn.push.simple.SimplePushReceiver">
+            <intent-filter>
+                <action android:name="org.cn.push.org.cn.application"></action>
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

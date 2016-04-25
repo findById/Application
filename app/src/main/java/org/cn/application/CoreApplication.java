@@ -2,6 +2,10 @@ package org.cn.application;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
+
+import org.cn.core.utils.LocateManager;
+import org.cn.push.core.PushService;
 
 /**
  * Created by chenning on 16-2-26.
@@ -16,6 +20,10 @@ public class CoreApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        startService(new Intent(getApplicationContext(), PushService.class));
+
+        LocateManager lm = new LocateManager();
+        lm.getLocation(getApplicationContext());
     }
 
     @Override

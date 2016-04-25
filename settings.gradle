@@ -1,1 +1,1 @@
-include ':app', ':upgrade'
+include ':app', ':upgrade', ':core', ':media', ':rpc-core', ':pushservice'

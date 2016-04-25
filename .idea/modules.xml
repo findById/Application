@@ -4,6 +4,10 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Application.iml" filepath="$PROJECT_DIR$/Application.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/media/media.iml" filepath="$PROJECT_DIR$/media/media.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pushservice/pushservice.iml" filepath="$PROJECT_DIR$/pushservice/pushservice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rpc-core/rpc-core.iml" filepath="$PROJECT_DIR$/rpc-core/rpc-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/upgrade/upgrade.iml" filepath="$PROJECT_DIR$/upgrade/upgrade.iml" />
     </modules>
   </component>
