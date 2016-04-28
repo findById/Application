@@ -80,7 +80,7 @@ public class ProcessesLayout extends FrameLayout {
         super.onFinishInflate();
         mContentView = this.getChildAt(getChildCount() - 1);
         if (mContentView != null) {
-            mContentView.setVisibility(View.GONE);
+            // mContentView.setVisibility(View.GONE);
         }
     }
 
@@ -133,6 +133,9 @@ public class ProcessesLayout extends FrameLayout {
                 break;
             }
             default:
+                if (mContentView != null) {
+                    return mContentView.findViewById(id);
+                }
                 break;
         }
         return null;
@@ -148,6 +151,17 @@ public class ProcessesLayout extends FrameLayout {
             mCurrentView.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out));
             target.startAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in));
         }
+
+        if (type == Type.EMPTY || type == Type.ERROR) {
+            if (mContentView != null) {
+                mContentView.setVisibility(View.GONE);
+            }
+        } else {
+            if (mContentView != null) {
+                mContentView.setVisibility(View.VISIBLE);
+            }
+        }
+
         if (mCurrentView != null) {
             mCurrentView.setVisibility(View.GONE);
         }

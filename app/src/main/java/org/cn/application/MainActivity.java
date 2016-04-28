@@ -1,5 +1,6 @@
 package org.cn.application;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -11,6 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import org.cn.application.ui.activity.StatusInfoActivity;
+import org.cn.application.ui.activity.TagsActivity;
 
 public class MainActivity extends SmartActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -36,24 +40,20 @@ public class MainActivity extends SmartActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        this.mNavigationView = navigationView;
 
         initView();
         initData();
     }
 
     private void initView() {
-        // super.add(new MainFragment(), "main", null);
     }
 
     private void initData() {
-
     }
 
     @Override
@@ -102,7 +102,7 @@ public class MainActivity extends SmartActivity
         new android.os.Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                onNavigationChanged(id + "");
+                onNavigationChanged(id);
             }
         }, 300);
 
@@ -114,12 +114,17 @@ public class MainActivity extends SmartActivity
      * @param id Handle the @id action
      * @return
      */
-    private boolean onNavigationChanged(String id) {
+    private boolean onNavigationChanged(int id) {
 
         String tag = "";
         switch (id) {
-            case "": {
-                break;
+            case R.id.nav_send: {
+                startActivity(new Intent(this, TagsActivity.class));
+                return true;
+            }
+            case R.id.nav_about: {
+                startActivity(new Intent(this, StatusInfoActivity.class));
+                return true;
             }
             default:
                 // ignored

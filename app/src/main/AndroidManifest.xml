@@ -41,6 +41,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.activity.TagsActivity"></activity>
+        <activity android:name=".ui.activity.StatusInfoActivity"/>
+
         <service
             android:name="org.cn.push.core.PushService"
             android:process=":PushService"></service>
