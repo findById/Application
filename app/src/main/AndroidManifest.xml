@@ -8,6 +8,13 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.CAMERA"></uses-permission>
+    <!-- 录音 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- 相机 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"></uses-permission>
 
     <!--  -->
     <uses-permission-sdk-23 android:name="android.permission.INTERNET"></uses-permission-sdk-23>
@@ -15,6 +22,9 @@
     <uses-permission-sdk-23 android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission-sdk-23>
     <uses-permission-sdk-23 android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission-sdk-23>
     <uses-permission-sdk-23 android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission-sdk-23>
+    <uses-permission-sdk-23 android:name="android.permission.CAMERA"></uses-permission-sdk-23>
+
+    <uses-permission-sdk-23 android:name="android.permission.SYSTEM_ALERT_WINDOW"></uses-permission-sdk-23>
 
     <application
         android:name=".CoreApplication"
@@ -41,12 +51,21 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activity.TagsActivity"></activity>
-        <activity android:name=".ui.activity.StatusInfoActivity"/>
+        <activity android:name=".ui.tab.TabActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <activity android:name=".ui.activity.AboutActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activity.StatusInfoActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.suspension.FloatActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <service
             android:name="org.cn.push.core.PushService"
             android:process=":PushService"></service>
+        <service android:name=".ui.suspension.FloatedService"
+            android:process=":float"></service>
 
         <receiver android:name="org.cn.push.simple.SimplePushReceiver">
             <intent-filter>

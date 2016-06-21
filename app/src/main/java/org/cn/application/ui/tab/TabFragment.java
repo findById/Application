@@ -1,8 +1,9 @@
-package org.cn.application.ui.fragment;
+package org.cn.application.ui.tab;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +16,26 @@ import org.cn.core.widget.ProcessesLayout;
  * Created by chenning on 16-4-28.
  */
 public class TabFragment extends BaseFragment {
+    public static final String ACTION = "action";
 
     private ProcessesLayout mProcessesLayout;
+
+    private String action;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            action = savedInstanceState.getString("action", "");
+        }
+        if (TextUtils.isEmpty(action) && getArguments() != null) {
+            action = getArguments().getString(ACTION);
+        }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        outState.putString("action", action);
         super.onSaveInstanceState(outState);
     }
 
@@ -50,7 +61,7 @@ public class TabFragment extends BaseFragment {
             public void run() {
                 mProcessesLayout.showContent();
             }
-        }, 5000);
+        }, 200);
     }
 
 }

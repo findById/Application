@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class SmartActivity extends BaseActivity {
     }
 
     public Fragment onChangeFragment(String key) {
-        if (key == null) {
+        if (TextUtils.isEmpty(key)) {
             return null;
         }
         Fragment tmp = mFragmentManager.findFragmentByTag(key);

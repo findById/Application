@@ -1,18 +1,20 @@
 package org.cn.application.ui.activity;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.cn.application.BaseActivity;
 import org.cn.application.R;
 import org.cn.core.utils.Screen;
 import org.cn.core.utils.SystemUtil;
@@ -24,7 +26,7 @@ import java.util.List;
 /**
  * Created by chenning on 16-4-18.
  */
-public class StatusInfoActivity extends Activity {
+public class StatusInfoActivity extends BaseActivity {
     private static final String TAG = StatusInfoActivity.class.getSimpleName();
 
     private RecyclerView mRecyclerView;
@@ -35,8 +37,27 @@ public class StatusInfoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status_information);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         initView();
         initData();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                onBackPressed();
+                return true;
+            }
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initView() {
@@ -108,8 +129,13 @@ public class StatusInfoActivity extends Activity {
 
         data.add(new InfoBean("网络状态", 1));
         data.add(new InfoBean(0, "网络情况", net[0]));
-        data.add(new InfoBean(0, "网络类型", net[1]));
-
+        if ("connected".equals(net[0])) {
+            data.add(new InfoBean(0, "网络类型", net[1]));
+            if (!"WIFI".contains(net[1])) {
+//                data.add(new InfoBean(0, "网络类型", net[2]));
+//                data.add(new InfoBean(0, "网络类型", net[3]));
+            }
+        }
         data.add(new InfoBean("系统信息", 1));
         data.add(new InfoBean(0, "品牌", Build.BRAND));
         data.add(new InfoBean(0, "用户", Build.USER));
@@ -138,6 +164,8 @@ public class StatusInfoActivity extends Activity {
                 mAdapter.update(data);
             }
         });
+
+        Log.d(TAG, SystemUtil.getCpuInfo());
 
         return result;
     }

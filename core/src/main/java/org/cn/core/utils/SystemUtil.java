@@ -23,6 +23,37 @@ import java.util.regex.Pattern;
 public class SystemUtil {
     private static final String TAG = "system";
 
+    public static String getCpuInfo() {
+        String command = "more /proc/cpufreq";
+
+        BufferedReader br = null;
+        String result = "";
+
+        ProcessBuilder cmd = new ProcessBuilder(command);
+        Process process = null;
+        try {
+            process = cmd.start();
+            br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String temp;
+            while ((temp = br.readLine()) != null) {
+                result += temp;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException ignored) {
+                }
+            }
+            if (process != null) {
+                process.destroy();
+            }
+        }
+        return result;
+    }
+
     public static String[] getHardwareInfo() {
         String[] information = new String[6];
         String path = "/proc/version";
@@ -203,7 +234,7 @@ public class SystemUtil {
     }
 
     public static String[] getNetworkInfo(Context ctx) {
-        String[] result = new String[3];
+        String[] result = new String[5];
         String type = "unknown";
         ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = cm.getActiveNetworkInfo();
@@ -211,44 +242,47 @@ public class SystemUtil {
             result[0] = "unconnected";
         } else {
             result[0] = "connected";
-        }
-        if (info.getType() == ConnectivityManager.TYPE_WIFI) {
-            WifiManager wifiManager = (WifiManager) ctx.getSystemService(Context.WIFI_SERVICE);
-            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-            type = "WIFI" + wifiInfo.getSSID();
-        } else if (info.getType() == ConnectivityManager.TYPE_MOBILE) {
-            String subType = info.getSubtypeName();
-            int networkType = info.getSubtype();
-            switch (networkType) {
-                case TelephonyManager.NETWORK_TYPE_GPRS:
-                case TelephonyManager.NETWORK_TYPE_EDGE:
-                case TelephonyManager.NETWORK_TYPE_CDMA:
-                case TelephonyManager.NETWORK_TYPE_1xRTT:
-                case TelephonyManager.NETWORK_TYPE_IDEN: //api<8 : replace by 11
-                    type = "2G";
-                    break;
-                case TelephonyManager.NETWORK_TYPE_UMTS:
-                case TelephonyManager.NETWORK_TYPE_EVDO_0:
-                case TelephonyManager.NETWORK_TYPE_EVDO_A:
-                case TelephonyManager.NETWORK_TYPE_HSDPA:
-                case TelephonyManager.NETWORK_TYPE_HSUPA:
-                case TelephonyManager.NETWORK_TYPE_HSPA:
-                case TelephonyManager.NETWORK_TYPE_EVDO_B: //api<9 : replace by 14
-                case TelephonyManager.NETWORK_TYPE_EHRPD:  //api<11 : replace by 12
-                case TelephonyManager.NETWORK_TYPE_HSPAP:  //api<13 : replace by 15
-                    type = "3G";
-                    break;
-                case TelephonyManager.NETWORK_TYPE_LTE:    //api<11 : replace by 13
-                    type = "4G";
-                    break;
-                default:
-                    // http://baike.baidu.com/item/TD-SCDMA 中国移动 联通 电信 三种3G制式
-                    if ("TD-SCDMA".equalsIgnoreCase(subType) || "WCDMA".equalsIgnoreCase(subType) || "CDMA2000".equalsIgnoreCase(subType)) {
-                        type = "3G";
-                    } else {
-                        type = subType;
-                    }
-                    break;
+            if (info.getType() == ConnectivityManager.TYPE_WIFI) {
+                WifiManager wifiManager = (WifiManager) ctx.getSystemService(Context.WIFI_SERVICE);
+                WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+                type = "WIFI" + wifiInfo.getSSID();
+            } else if (info.getType() == ConnectivityManager.TYPE_MOBILE) {
+                String subType = info.getSubtypeName();
+                int networkType = info.getSubtype();
+                switch (networkType) {
+                    case TelephonyManager.NETWORK_TYPE_GPRS:
+                    case TelephonyManager.NETWORK_TYPE_EDGE:
+                    case TelephonyManager.NETWORK_TYPE_CDMA:
+                    case TelephonyManager.NETWORK_TYPE_1xRTT:
+                    case TelephonyManager.NETWORK_TYPE_IDEN: //api<8 : replace by 11
+                        type = "2G " + info.getSubtypeName();
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_UMTS:
+                    case TelephonyManager.NETWORK_TYPE_EVDO_0:
+                    case TelephonyManager.NETWORK_TYPE_EVDO_A:
+                    case TelephonyManager.NETWORK_TYPE_HSDPA:
+                    case TelephonyManager.NETWORK_TYPE_HSUPA:
+                    case TelephonyManager.NETWORK_TYPE_HSPA:
+                    case TelephonyManager.NETWORK_TYPE_EVDO_B: //api<9 : replace by 14
+                    case TelephonyManager.NETWORK_TYPE_EHRPD:  //api<11 : replace by 12
+                    case TelephonyManager.NETWORK_TYPE_HSPAP:  //api<13 : replace by 15
+                        type = "3G " + info.getSubtypeName();
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_LTE:    //api<11 : replace by 13
+                        type = "4G " + info.getSubtypeName();
+                        break;
+                    default:
+                        // http://baike.baidu.com/item/TD-SCDMA 中国移动 联通 电信 三种3G制式
+                        if ("TD-SCDMA".equalsIgnoreCase(subType) || "WCDMA".equalsIgnoreCase(subType) || "CDMA2000".equalsIgnoreCase(subType)) {
+                            type = "3G " + info.getSubtypeName();
+                        } else {
+                            type = subType;
+                        }
+                        break;
+                }
+
+                result[2] = info.getExtraInfo(); // cmnet
+                result[3] = info.getTypeName(); // mobile
             }
         }
         result[1] = type;

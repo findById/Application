@@ -20,10 +20,8 @@ public class CoreApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-//        startService(new Intent(getApplicationContext(), PushService.class));
-//
-//        LocateManager lm = new LocateManager();
-//        lm.getLocation(getApplicationContext());
+        startService(new Intent(getApplicationContext(), PushService.class));
+
     }
 
     @Override
